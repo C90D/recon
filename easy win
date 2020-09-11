@@ -1,0 +1,3 @@
+redis未授权
+nmap -A -p 6379 -script redis-info --resolve-all -iL /root/dvp/domain.txt -oA redis
+
