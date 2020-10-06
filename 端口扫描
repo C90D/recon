@@ -11,11 +11,41 @@
 3. 爆破，利用shuffledns 爆破，注意，不要直接使用massdns， 因为massdns会有泛解析的结果，shuffledns 加入了泛解析去除的功能
 
  3.1 利用shuffledns爆破，注意要用百万字典。
- 3.2 
+ 3.2 得到爆破以后的结果后，利用kill去掉泛解析，然后生成更多的结果，利用altdns生成更多结果，注意，不要用altdns自带解析器解析，不要用altdns自带解析器解析，要用altdns自带解析器解析
+ 因为太慢了。
+ 3.3 利用shuffledn处理生成的结果，
+ 先 time shuffledns -d bf1.yahoo.com -list bf1.yahoo.com.txt -r /root/db/resolvers.txt -o tokill.out
+ 然后传给kill， 这里用一个循环搞定。
+ 
+
+3个步骤必须逐步进行，不能漏掉， 第一步获得水平域名， 第二步生成基本的子域名， 第三步在基础的子域名基础上进行爆破，获得更多的子域名。
+
+整个子域名收集的核心是爆破， 但爆破需要在基础子域名的上面才能更好进行。
+第三步可以重复多次， 具体情况具体判断。
+比如提取了3级域以后继续爆破。
+
+
 
 
 遇到泛解析的做法：
+泛解析的两种情况：
+1。 2级域名， 3级域名中有泛解析
+根据情况进行处理， 如果要处理， 这个情况需要把这些域名找出来，这时候不能用kill， 而是用
+https://github.com/flag007/recon/blob/master/wildcard_detection.sh
+把输出结果保存
+从2级域名或者3级域名去除这些结果。提示， 用anew 这个工具就能去除。
+对于这种情况， kill虽然也能去除一些泛解析， 但是能力有限，我举个例子， kill是根据指向同一个ip的
+域名有多少来判断的。比如20个域名指向一个ip， 这个ip就会保存起来，凡是指向这个ip的域名都会认为是泛解析。
+如果你的三级域名只有19个，是完全检测不出来的， 所有最好用wildcard_detection， 然后anew去除。
+
+2. 各种工具生成的结果存在泛解析。这种情况就是工具的输出结果， 有时候会诡异的大，那么可能结果存在泛解析，需要处理一下。
 time shuffledns -d bf1.yahoo.com -list bf1.yahoo.com.txt -r /root/db/resolvers.txt -o tokill.out
+
+
+
+
+注意事项： 每次使用泛解析去除的时候，你都可能会删除一些重要资产， 但是， 这是对效率做的妥协， 你不可能用扫描器去扫几百万，几千万个域名。
+这种事情提现在挖洞的方方面面，你总要牺牲什么换取什么，这里就是牺牲了结果的准确性，换取速度的提升。
 
 
 for i in $(cat domain.txt) ;do echo $i; dig +short $i;done | tee dig.txt
