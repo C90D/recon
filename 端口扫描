@@ -1,0 +1,5 @@
+for i in $(cat domain.txt) ;do echo $i; dig +short $i;done | tee dig.txt
+
+cat dig.txt | grep -oE "^[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | tee -a ip.txt
+
+masscan -p1-65535 -iL ip.txt --max-rate 1800 -oG mass.out
