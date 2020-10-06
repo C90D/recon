@@ -1,3 +1,23 @@
+信息收集流程：
+先收集水平域， 然后收集垂直域。
+
+1. easy 水平域， https://tools.whoisxmlapi.com/reverse-whois-search, 利用whois whois 一个域名， 得到邮箱, 然后用邮箱whois  出水平域。
+注意， 可以直接用for 循环， 然后利用正则表达式把邮箱提取出来。
+
+2然后得到垂直域， 保存到root.txt, 利用ass 可以快速收集， 但要深入测试。按照以下过程：
+2.1利用amass 和 subfinder 得到第三方的结果， 这些结果的作用是可以让你看出域名的生成方式，以及给后面的爆破提供了基础。
+2.2 提取出3级域，利用3级域名再跑一次amass，subfinder。 这个的依据是子域名和根域名在第三方的api中结果不一样。
+
+3. 爆破，利用shuffledns 爆破，注意，不要直接使用massdns， 因为massdns会有泛解析的结果，shuffledns 加入了泛解析去除的功能
+
+ 3.1 利用shuffledns爆破，注意要用百万字典。
+ 3.2 
+
+
+遇到泛解析的做法：
+time shuffledns -d bf1.yahoo.com -list bf1.yahoo.com.txt -r /root/db/resolvers.txt -o tokill.out
+
+
 for i in $(cat domain.txt) ;do echo $i; dig +short $i;done | tee dig.txt
 
 cat dig.txt | grep -oE "^[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*$" | sort -u |tee -a ip.txt
@@ -18,3 +38,14 @@ for i in $(cat root.txt); do amass enum --passive -d $i -config /root/.config/am
 
 subfinder
 for i in $(cat root.txt ); do subfinder -d $i  --silent -config /root/.config/subfinder/config.yaml |  tee -a subfinder.out ;done
+
+
+shuffledns
+for i in $(cat root.txt ); do shuffledns -d hackerone.com -w /root/db/all.txt -r resolvers.txt -o $1.txt;done
+
+
+
+
+
+
+
