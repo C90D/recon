@@ -14,3 +14,7 @@ for i in $(cat httpx.txt);do python3 dirsearch.py -u $i -e php,jsp,asp ;done
 amass
 
 for i in $(cat root.txt); do amass enum --passive -d $i -config /root/.config/amass/config.ini | tee -a amass.out;done
+
+
+subfinder
+for i in $(cat root.txt ); do subfinder -d $i  --silent -config /root/.config/subfinder/config.yaml |  tee -a subfinder.out ;done
