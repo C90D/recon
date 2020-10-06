@@ -7,5 +7,5 @@ masscan -p1-65535 -iL ip.txt --max-rate 1800 -oG mass.out
 
 
 目录爆破
-mkdir out 
+
 for i in $(cat httpx.txt);do python3 dirsearch.py -u $i -e php,jsp,asp ;done
