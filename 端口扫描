@@ -77,6 +77,15 @@ assetfinder
 for i in $(cat root.txt); do assetfinder $i |  grep -v "@" |  tee -a domain.txt; done
 
 
+2级
+grep -v 'com\.' | grep -oE '[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+$' | sort -u
+grep 'com\.' | grep -oE '[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+$' | sort -u
+
+3级
+grep -v 'www' | grep -v 'com\.' | grep -oE '[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+$' | sort -u
+grep -v 'www' | grep 'com\.' | grep -oE '[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+$' | sort -u
+
+
 
 
 
