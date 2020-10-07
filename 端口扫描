@@ -1,3 +1,4 @@
+
 信息收集流程：
 先收集水平域， 然后收集垂直域。
 
@@ -69,9 +70,12 @@ for i in $(cat root.txt); do amass enum --passive -d $i -config /root/.config/am
 subfinder
 for i in $(cat root.txt ); do subfinder -d $i  --silent -config /root/.config/subfinder/config.yaml |  tee -a subfinder.out ;done
 
-
 shuffledns
 for i in $(cat root.txt ); do shuffledns -d hackerone.com -w /root/db/all.txt -r resolvers.txt -o $1.txt;done
+
+assetfinder
+for i in $(cat root.txt); do assetfinder $i |  grep -v "@" |  tee -a domain.txt; done
+
 
 
 
